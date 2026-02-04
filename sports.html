@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قسم الرياضة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            padding: 40px;
+            margin: 0;
+        }
+        .quiz-container {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #2d3748;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-family: 'Tajawal', sans-serif;
+            transition: 0.3s;
+            text-align: right;
+            color: #ffffff;
+        }
+        .option-btn:hover {
+            background: #4a5568;
+            transform: translateX(-5px);
+        }
+        .correct {
+            background-color: #c6f6d5 !important;
+            border-color: #48bb78 !important;
+            color: #22543d;
+        }
+        .wrong {
+            background-color: #fed7d7 !important;
+            border-color: #f56565 !important;
+            color: #742a2a;
+        }
+        h1 { color: #e53e3e; margin-bottom: 20px; }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: #667eea; color: white; }
+        .score-board {
+            background: #2d3748;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #2d3748;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            height: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #38a169;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>⚽ تحدي المعلومات الرياضية</h1>
+        <div class="score-board">النقاط: <span id="score">0</span></div>
+        <!-- إضافة شريط التقدم -->
+        <div class="progress-container">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        
+        <div id="question-box"></div>
+
+        <a href="index.html" class="back-btn">← العودة للصفحة الرئيسية</a>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                text: "ما هي الدولة التي فازت بكأس العالم 2022؟",
+                options: [
+                    { text: "🇧🇷 البرازيل", isCorrect: false },
+                    { text: "🇦🇷 الأرجنتين", isCorrect: true },
+                    { text: "🇫🇷 فرنسا", isCorrect: false },
+                    { text: "🇩🇪 ألمانيا", isCorrect: false }
+                ]
+            },
+            {
+                text: "كم عدد اللاعبين في فريق كرة السلة؟",
+                options: [
+                    { text: "5 لاعبين", isCorrect: true },
+                    { text: "7 لاعبين", isCorrect: false },
+                    { text: "11 لاعب", isCorrect: false },
+                    { text: "6 لاعبين", isCorrect: false }
+                ]
+            },
+            {
+                text: "من هو الهداف التاريخي لدوري أبطال أوروبا؟",
+                options: [
+                    { text: "ليونيل ميسي", isCorrect: false },
+                    { text: "كريستيانو رونالدو", isCorrect: true },
+                    { text: "نيمار", isCorrect: false },
+                    { text: "محمد صلاح", isCorrect: false }
+                ]
+            },
+            {
+                text: "كم عدد أشواط مباراة كرة القدم الرسمية؟",
+                options: [
+                    { text: "شوط واحد", isCorrect: false },
+                    { text: "شوطان", isCorrect: true },
+                    { text: "3 أشواط", isCorrect: false },
+                    { text: "4 أشواط", isCorrect: false }
+                ]
+            },
+            {
+                text: "في أي دولة نشأت كرة القدم الحديثة؟",
+                options: [
+                    { text: "🇧🇷 البرازيل", isCorrect: false },
+                    { text: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 إنجلترا", isCorrect: true },
+                    { text: "🇪🇸 إسبانيا", isCorrect: false },
+                    { text: "🇮🇹 إيطاليا", isCorrect: false }
+                ]
+             },
+             {
+                text: "من هو اللاعب الملقب بـ 'الجوهرة السوداء'؟",
+                options: [
+                    { text: "دييغو مارادونا", isCorrect: false },
+                    { text: "بيليه", isCorrect: true },
+                    { text: "زين الدين زيدان", isCorrect: false },
+                    { text: "رونالدينيو", isCorrect: false }
+                ]
+            },
+            
+            {
+                text: "ما هي مدة مباراة كرة القدم الأصلية؟",
+                options: [
+                    { text: "45 دقيقة", isCorrect: false },
+                    { text: "60 دقيقة", isCorrect: false },
+                    { text: "90 دقيقة", isCorrect: true },
+                    { text: "100 دقيقة", isCorrect: false }
+                ]
+            },
+            {
+                text: "أين أقيمت كأس العالم 2010؟",
+                options: [
+                    { text: "جنوب أفريقيا", isCorrect: true },
+                    { text: "البرازيل", isCorrect: false },
+                    { text: "ألمانيا", isCorrect: false },
+                    { text: "روسيا", isCorrect: false }
+                ]
+            },
+            {
+                text: "ما هي الرياضة التي تستخدم فيها الريشة؟",
+                options: [
+                    { text: "التنس", isCorrect: false },
+                    { text: "كرة الطاولة", isCorrect: false },
+                    { text: "الريشة الطائرة", isCorrect: true },
+                    { text: "الاسكواش", isCorrect: false }
+                ]
+            },
+            {
+                text: "من هو المنتخب العربي الذي وصل لنصف نهائي كأس العالم 2022؟",
+                options: [
+                    { text: "🇸🇦 السعودية", isCorrect: false },
+                    { text: "🇲🇦 المغرب", isCorrect: true },
+                    { text: "🇹🇳 تونس", isCorrect: false },
+                    { text: "🇪🇬 مصر", isCorrect: false }
+                ]
+            },
+            {
+                text: "من فاز بكأس أمم أفريقيا 2019؟",
+                options: [
+                    { text: "🇩🇿 الجزائر", isCorrect: true },
+                    { text: "🇸🇳 السنغال", isCorrect: false },
+                    { text: "🇳🇬 نيجيريا", isCorrect: false },
+                    { text: "🇹🇳 تونس", isCorrect: false }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        
+        function loadQuestion() {
+            const box = document.getElementById('question-box');
+            const q = questions[currentQuestion];
+            
+            // تحديث شريط التقدم
+            const progressPercent = (currentQuestion / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+            
+            if (currentQuestion >= questions.length) {
+                box.innerHTML = `<h2 style='color:green'>🎉 مبروك! لقد أنهيت تحدي الرياضة!</h2>
+                                 <p style="font-size: 1.5rem; color: #ffffff;">نتيجتك النهائية: ${score} من ${questions.length}</p>
+                                 <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 25px; background: #e53e3e; color: white; border: none; border-radius: 25px; cursor: pointer; font-size: 1rem;">🔄 إعادة المحاولة</button>`;
+                return;
+            }
+
+            let html = `<div class="fade-in">
+                        <h2 style="color: #ffffff; margin-bottom: 25px;">${q.text}</h2>`;
+            
+            q.options.forEach(opt => {
+                html += `<button class="option-btn" data-is-correct="${opt.isCorrect}" onclick="checkAnswer(this, ${opt.isCorrect})">${opt.text}</button>`;
+            });
+            
+            html += `<p id="result-msg" style="margin-top: 20px; font-weight: bold; min-height: 25px;"></p>
+                     </div>`;
+            box.innerHTML = html;
+        }
+
+        function checkAnswer(btn, isCorrect) {
+            const msg = document.getElementById('result-msg');
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            // تعطيل الأزرار لمنع الضغط المتكرر فوراً
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('score').textContent = score;
+                btn.classList.add('correct');
+                msg.textContent = "إجابة صحيحة! أحسنت يا بطل 🏆";
+                msg.style.color = "green";
+            } else {
+                btn.classList.add('wrong');
+                msg.textContent = "إجابة خاطئة! الإجابة الصحيحة ملونة بالأخضر.";
+                msg.style.color = "red";
+
+                // إظهار الإجابة الصحيحة
+                buttons.forEach(b => {
+                    if (b.dataset.isCorrect === 'true') {
+                        b.classList.add('correct');
+                    }
+                });
+            }
+
+            // الانتقال للسؤال التالي تلقائياً سواء كانت الإجابة صحيحة أو خاطئة
+            setTimeout(() => {
+                currentQuestion++;
+                loadQuestion();
+            }, 1500);
+        }
+
+        // تشغيل أول سؤال عند فتح الصفحة
+        loadQuestion();
+    </script>
+</body>
+</html>

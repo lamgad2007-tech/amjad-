@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قسم الألغاز</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            padding: 40px;
+            margin: 0;
+        }
+        .quiz-container {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #2d3748;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-family: 'Tajawal', sans-serif;
+            transition: 0.3s;
+            text-align: right;
+            color: #ffffff;
+        }
+        .option-btn:hover {
+            background: #4a5568;
+            transform: translateX(-5px);
+        }
+        .correct {
+            background-color: #c6f6d5 !important;
+            border-color: #48bb78 !important;
+            color: #22543d;
+        }
+        .wrong {
+            background-color: #fed7d7 !important;
+            border-color: #f56565 !important;
+            color: #742a2a;
+        }
+        h1 { color: #3182ce; margin-bottom: 20px; }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: #667eea; color: white; }
+        .score-board {
+            background: #2d3748;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #2d3748;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            height: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #38a169;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>🧩 تحدي الألغاز والذكاء</h1>
+        <div class="score-board">النقاط: <span id="score">0</span></div>
+        <!-- إضافة شريط التقدم -->
+        <div class="progress-container">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        
+        <div id="question-box"></div>
+
+        <a href="index.html" class="back-btn">← العودة للصفحة الرئيسية</a>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                text: "شيء كلما زاد نقص، ما هو؟",
+                options: [
+                    { text: "المال", isCorrect: false },
+                    { text: "العمر", isCorrect: true },
+                    { text: "الوزن", isCorrect: false },
+                    { text: "الماء", isCorrect: false }
+                ]
+            },
+            {
+                text: "ما هو الشيء الذي يكتب ولا يقرأ؟",
+                options: [
+                    { text: "القلم", isCorrect: true },
+                    { text: "الكتاب", isCorrect: false },
+                    { text: "الرسالة", isCorrect: false },
+                    { text: "الهاتف", isCorrect: false }
+                ]
+            },
+            {
+                text: "له أسنان ولا يعض، ما هو؟",
+                options: [
+                    { text: "المنشار", isCorrect: false },
+                    { text: "المشط", isCorrect: true },
+                    { text: "الأسد", isCorrect: false },
+                    { text: "الشوكة", isCorrect: false }
+                ]
+            },
+            {
+                text: "ما هو الشيء الذي كلما أخذت منه كبر؟",
+                options: [
+                    { text: "البحر", isCorrect: false },
+                    { text: "الحفرة", isCorrect: true },
+                    { text: "الجبل", isCorrect: false },
+                    { text: "المال", isCorrect: false }
+                ]
+            },
+            {
+                text: "شيء يجري ولا يمشي، ما هو؟",
+                options: [
+                    { text: "السيارة", isCorrect: false },
+                    { text: "النهر", isCorrect: true },
+                    { text: "الرياح", isCorrect: false },
+                    { text: "القطار", isCorrect: false }
+                ]
+            },
+            {
+                text: "ما هو الشيء الذي له عين ولا يرى؟",
+                options: [
+                    { text: "الإبرة", isCorrect: true },
+                    { text: "الإعصار", isCorrect: false },
+                    { text: "البطاطس", isCorrect: false },
+                    { text: "الجمجمة", isCorrect: false }
+                ]
+            },
+            {
+                text: "شيء تحمله ويحملك في نفس الوقت؟",
+                options: [
+                    { text: "الحقيبة", isCorrect: false },
+                    { text: "الحذاء", isCorrect: true },
+                    { text: "السيارة", isCorrect: false },
+                    { text: "القبعة", isCorrect: false }
+                ]
+            },
+            {
+                text: "ما هو البيت الذي ليس فيه أبواب ولا نوافذ؟",
+                options: [
+                    { text: "بيت الشعر", isCorrect: true },
+                    { text: "بيت النمل", isCorrect: false },
+                    { text: "بيت العنكبوت", isCorrect: false },
+                    { text: "بيت الثلج", isCorrect: false }
+                ]
+            },
+            {
+                text: "ما هو الشيء الذي ينبض بلا قلب؟",
+                options: [
+                    { text: "الساعة", isCorrect: true },
+                    { text: "الطبل", isCorrect: false },
+                    { text: "الجرس", isCorrect: false },
+                    { text: "العصفور", isCorrect: false }
+                ]
+            },
+            {
+                text: "شيء تذبحه وتبكي عليه؟",
+                options: [
+                    { text: "الدجاجة", isCorrect: false },
+                    { text: "البصل", isCorrect: true },
+                    { text: "الخروف", isCorrect: false },
+                    { text: "السمك", isCorrect: false }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        
+        function loadQuestion() {
+            const box = document.getElementById('question-box');
+            const q = questions[currentQuestion];
+            
+            // تحديث شريط التقدم
+            const progressPercent = (currentQuestion / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+            
+            if (currentQuestion >= questions.length) {
+                box.innerHTML = `<h2 style='color:green'>🎉 مبروك! لقد أنهيت تحدي الألغاز!</h2>
+                                 <p style="font-size: 1.5rem; color: #ffffff;">نتيجتك النهائية: ${score} من ${questions.length}</p>
+                                 <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 25px; background: #e53e3e; color: white; border: none; border-radius: 25px; cursor: pointer; font-size: 1rem;">🔄 إعادة المحاولة</button>`;
+                return;
+            }
+
+            let html = `<div class="fade-in">
+                        <h2 style="color: #ffffff; margin-bottom: 25px;">${q.text}</h2>`;
+            
+            q.options.forEach(opt => {
+                html += `<button class="option-btn" data-is-correct="${opt.isCorrect}" onclick="checkAnswer(this, ${opt.isCorrect})">${opt.text}</button>`;
+            });
+            
+            html += `<p id="result-msg" style="margin-top: 20px; font-weight: bold; min-height: 25px;"></p>
+                     </div>`;
+            box.innerHTML = html;
+        }
+
+        function checkAnswer(btn, isCorrect) {
+            const msg = document.getElementById('result-msg');
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('score').textContent = score;
+                btn.classList.add('correct');
+                msg.textContent = "إجابة صحيحة! ذكي جداً 🧠";
+                msg.style.color = "green";
+            } else {
+                btn.classList.add('wrong');
+                msg.textContent = "إجابة خاطئة! الإجابة الصحيحة ملونة بالأخضر.";
+                msg.style.color = "red";
+
+                buttons.forEach(b => {
+                    if (b.dataset.isCorrect === 'true') {
+                        b.classList.add('correct');
+                    }
+                });
+            }
+
+            setTimeout(() => {
+                currentQuestion++;
+                loadQuestion();
+            }, 1500);
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
