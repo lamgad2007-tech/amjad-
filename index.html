@@ -148,23 +148,7 @@
         </div>
     </div>
 
-    <!-- عداد الزوار -->
-    <div id="admin-counter" style="text-align: center; margin-top: 40px; padding: 20px; background: rgba(0,0,0,0.8); border-radius: 10px; color: #d4af37; border: 1px solid #d4af37; max-width: 300px; margin-left: auto; margin-right: auto;">
-        👑 <span id="visit-count" style="color: white; font-weight: bold; font-size: 1.2rem;">...</span>
-    </div>
-
     <script>
-        // 1. الاتصال بخدمة عد الزوار (خدمة خارجية مجانية)
-        // ملاحظة: هذا العداد يحسب كل مرة يتم فيها فتح الصفحة من أي جهاز
-        fetch('https://api.counterapi.dev/v1/test22-site-counter-v1/visits/up')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('visit-count').innerText = data.count;
-            })
-            .catch(err => {
-                console.log('تعذر تحميل العداد');
-            });
-
         // دالة تغيير الوضع وحفظه
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
