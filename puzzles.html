@@ -94,9 +94,21 @@
             width: 0%;
             transition: width 0.5s ease;
         }
+
+        /* تنسيقات الوضع المضيء */
+        body.light-mode { background-color: #f0f2f5; color: #1a202c; }
+        body.light-mode .quiz-container { background: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        body.light-mode .option-btn { background: #edf2f7; color: #2d3748; }
+        body.light-mode .option-btn:hover { background: #e2e8f0; }
+        body.light-mode .score-board { background: #edf2f7; color: #2d3748; }
+        body.light-mode .progress-container { background-color: #e2e8f0; }
+        body.light-mode h2 { color: #2d3748 !important; }
+        body.light-mode p { color: #4a5568 !important; }
     </style>
 </head>
 <body>
+    <button id="theme-toggle" onclick="toggleTheme()" style="position: fixed; top: 20px; left: 20px; width: 50px; height: 50px; border-radius: 50%; border: none; background: #d4af37; font-size: 1.5rem; cursor: pointer; z-index: 1000;">☀️</button>
+
     <div class="quiz-container">
         <h1>🧩 تحدي الألغاز والذكاء</h1>
         <div class="score-board">النقاط: <span id="score">0</span></div>
@@ -217,13 +229,13 @@
             
             if (currentQuestion >= questions.length) {
                 box.innerHTML = `<h2 style='color:green'>🎉 مبروك! لقد أنهيت تحدي الألغاز!</h2>
-                                 <p style="font-size: 1.5rem; color: #ffffff;">نتيجتك النهائية: ${score} من ${questions.length}</p>
+                                 <p style="font-size: 1.5rem; color: inherit;">نتيجتك النهائية: ${score} من ${questions.length}</p>
                                  <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 25px; background: #e53e3e; color: white; border: none; border-radius: 25px; cursor: pointer; font-size: 1rem;">🔄 إعادة المحاولة</button>`;
                 return;
             }
 
             let html = `<div class="fade-in">
-                        <h2 style="color: #ffffff; margin-bottom: 25px;">${q.text}</h2>`;
+                        <h2 style="margin-bottom: 25px;">${q.text}</h2>`;
             
             q.options.forEach(opt => {
                 html += `<button class="option-btn" data-is-correct="${opt.isCorrect}" onclick="checkAnswer(this, ${opt.isCorrect})">${opt.text}</button>`;
@@ -262,6 +274,17 @@
                 currentQuestion++;
                 loadQuestion();
             }, 1500);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            document.getElementById('theme-toggle').innerText = isLight ? '🌙' : '☀️';
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }
+
+        if (localStorage.getItem('theme') === 'light') {
+            toggleTheme();
         }
 
         loadQuestion();
