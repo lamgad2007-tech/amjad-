@@ -138,10 +138,10 @@
     <script>
         // 1. الاتصال بخدمة عد الزوار (خدمة خارجية مجانية)
         // ملاحظة: هذا العداد يحسب كل مرة يتم فيها فتح الصفحة من أي جهاز
-        fetch('https://api.countapi.xyz/hit/test22-site-counter-v1/visits')
+        fetch('https://api.counterapi.dev/v1/test22-site-counter-v1/visits/up')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('visit-count').innerText = data.value;
+                document.getElementById('visit-count').innerText = data.count;
             })
             .catch(err => {
                 console.log('تعذر تحميل العداد');
